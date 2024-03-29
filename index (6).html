@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuro X</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Internal CSS -->
+    <style>
+        /* Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        /* Global Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(to right, #7289da, #5865f2); /* Discord-like blue gradient */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+
+        .navbar ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .navbar li {
+            margin-right: 20px;
+        }
+
+        .navbar li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s;
+        }
+
+        .navbar li a:hover {
+            color: #7289da; /* Discord blue */
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-top: 20px;
+        }
+
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        .card h2 {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .card:hover h2 {
+            color: #7289da; /* Discord blue */
+        }
+
+        .card p {
+            font-size: 18px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        /* Search Bar Styles */
+        .search-bar {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-bar input[type="text"] {
+            width: calc(100% - 60px);
+            padding: 15px;
+            border: none;
+            border-radius: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+
+        .search-bar input[type="text"]:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-bar button {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #7289da; /* Discord blue */
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+
+        .search-bar button:hover {
+            background-color: #5865f2; /* Discord-like darker blue */
+        }
+
+        /* Popup Styles */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9); /* Dark background */
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .popup-content {
+            color: #fff; /* White text */
+        }
+
+        .popup h2 {
+            font-size: 28px;
+            color: #7289da; /* Discord blue */
+            margin-bottom: 20px;
+        }
+
+        .popup small {
+            font-size: 20px;
+            color: #fff; /* White text */
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .popup p {
+            font-size: 18px;
+            color: #ccc; /* Gray text */
+            margin-bottom: 20px;
+        }
+
+        .popup button {
+            padding: 15px 30px;
+            background-color: #7289da; /* Discord blue */
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+
+        .popup button:hover {
+            background-color: #5865f2; /* Discord-like darker blue */
+        }
+
+        /* Close Button Styles */
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 24px;
+            color: #ddd; /* Light-gray close button */
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #fff; /* White on hover */
+        }
+
+        /* Improved Link Styles */
+        a {
+            color: #7289da; /* Discord blue */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #5865f2; /* Discord-like darker blue */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="#" class="logo">Neuro X</a>
+            <div class="navbar">
+                <ul>
+                    <li><a href="#" onclick="openTab('home')">Home</a></li>
+                    <li><a href="#" onclick="openTab('credits')">Credits</a></li>
+                    <li><a href="#" onclick="openTab('explore')">Scripts</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="tab-content active" id="home">
+                <div class="card">
+                    <h2>About Neuro X</h2>
+                    <p>Neuro X is a universal script hub featuring various sections across mobile and PC, alongside a search feature. In addition to Neuro X, we also develop other scripts. Since early 2024, Riley Hub has been creating scripts for games such as Bladeball, Arsenal, and more. Axiom, since 2023, is a powerful FPS shooting GUI inspired by Owl Hub.</p>
+                </div>
+            </div>
+            <div class="tab-content" id="credits">
+                <div class="card">
+                    <h2>Owner</h2>
+                    <p>Wuhaz</p>
+                </div>
+                <div class="card">
+                    <h2>Developers</h2>
+                    <p>Wuhaz</p>
+                    <p>Riley</p>
+                </div>
+                <div class="card">
+                    <h2>Special Thanks</h2>
+                    <p>Beta Testers</p>
+                </div>
+            </div>
+            <div class="tab-content" id="explore">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search for Scripts...">
+                    <button onclick="filterRepositories()"><i class="fas fa-search"></i></button>
+                </div>
+                <div id="searchResults">
+                    <!-- Search results will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup" id="repoPopup">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <div class="popup-content">
+            <h2 id="popup-name"></h2>
+            <small id="popup-subtitle">Changelog</small>
+            <p id="popup-changelog"></p>
+            <button onclick="getScript()">Get Script</button>
+        </div>
+    </div>
+
+    <!-- Scripts at the end for faster loading -->
+    <script>
+        // Sample repository data
+        const repositories = [
+            { name: 'Riley Hub V3', changelog: 'A Roblox script supporting numerous games Like Bladeball, Arsenal & More and multiple executors..' },
+            { name: 'Axoim', changelog: 'Coming Soon.' },
+            { name: 'Neuro X', changelog: 'Best Script Hub for Scripts, Featuring Different Sections for Mobile & PC.' }
+        ];
+
+        // Function to display repositories based on search query
+        function filterRepositories() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const searchResults = repositories.filter(repo =>
+                repo.name.toLowerCase().includes(searchInput) || (repo.changelog && repo.changelog.toLowerCase().includes(searchInput))
+            );
+
+            const searchResultsContainer = document.getElementById('searchResults');
+            searchResultsContainer.innerHTML = '';
+
+            searchResults.forEach(repo => {
+                const repoCard = document.createElement('div');
+                repoCard.classList.add('card');
+                repoCard.innerHTML = `
+                    <h2>${repo.name}</h2>
+                    <p>${repo.changelog}</p>
+                `;
+                repoCard.addEventListener('click', () => {
+                    openPopup(repo);
+                });
+                searchResultsContainer.appendChild(repoCard);
+            });
+        }
+
+        // Function to open popup with repository details
+        function openPopup(repo) {
+            const popup = document.getElementById('repoPopup');
+            const popupName = document.getElementById('popup-name');
+            const popupChangelog = document.getElementById('popup-changelog');
+
+            popupName.textContent = repo.name;
+            popupChangelog.textContent = repo.changelog || '';
+
+            popup.style.display = 'block';
+        }
+
+        // Function to close popup
+        function closePopup() {
+            const popup = document.getElementById('repoPopup');
+            popup.style.display = 'none';
+        }
+
+        // Function to copy script to clipboard and show notification
+        function getScript() {
+            const repo = repositories.find(repo => repo.name === document.getElementById('popup-name').textContent);
+            if (repo && repo.url) {
+                window.open(repo.url, '_blank');
+            }
+        }
+
+        function openTab(tabName) {
+            var i, tabContent;
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            filterRepositories();
+        }
+        // Display home tab by default
+        openTab('home');
+    </script>
+</body>
+</html>
